@@ -13,9 +13,16 @@ provider "aws" {
 }
 
 module "next_app" {
-  source  = "open-next/open-next/aws"
-  version = "2.4.0"
+  source    = "RJPearson94/open-next/aws//modules/tf-aws-open-next-zone"
+  version   = ">= 3.6.0"
+  prefix    = "ai-health-assistant-production-3"
+  folder_path = "../.open-next"
 
-  name      = var.app_name
-  build_dir = "${path.module}/../.open-next"
+  providers = {
+    aws              = aws
+    aws.global       = aws
+    aws.iam          = aws
+    aws.dns          = aws
+    aws.server_function = aws
+  }
 }

@@ -34,8 +34,8 @@ jobs:
 
       - name: Build Next.js
         run: |
-          npm run build
           npm run open-next
+          mv .open-next/server-functions .open-next/server-function
 
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v3
@@ -46,4 +46,9 @@ jobs:
 
       - name: Terraform Apply
         working-directory: terraform
-        run: terraform apply -auto-approve -var="app_name=ai-health-assistant" -var="aws_region=${{ vars.AWS_REGION }}"
+        env:
+          TF_VAR_aws_region: ${{ vars.AWS_REGION }}
+          TF_VAR_app_name: "ai-health-assistant"
+        run: |
+          terraform destroy -auto-approve
+          terraform apply -auto-approve
